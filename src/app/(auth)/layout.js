@@ -1,17 +1,11 @@
-import { AuthProvider } from '@/store/AuthContext';
-import '@/styles/globals.css';
-import { Inconsolata } from 'next/font/google';
-import { ToastContainer } from 'react-toastify';
-
-const inconsolata = Inconsolata({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-});
+import { AuthProvider } from "@/store/AuthContext";
+import "@/styles/globals.css";
+import { ToastContainer } from "react-toastify";
 
 export default function AuthLayout({ children }) {
   return (
-    <html lang='en'>
-      <body className={`${inconsolata.className} bg-gray-100`}>
+    <html lang="en">
+      <body className={`  bg-gray-100`}>
         <AuthProvider>
           {children}
           <ToastContainer />

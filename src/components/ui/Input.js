@@ -48,7 +48,7 @@ const Input = ({
       className={
         newClass
           ? newClass
-          : `${customClass} mt-4 px-4 relative py-2 rounded-lg bg-gray-200/95`
+          : `${customClass} mt-4 px-4 relative py-2 rounded-lg`
       }
     >
       {label && (
@@ -69,7 +69,7 @@ const Input = ({
           )}
         </label>
       )}
-      <div className="flex items-center border py-2 px-4 rounded-lg bg-white/90 ">
+      <div className="flex items-center border-2 border-gray-300  py-2 px-4 rounded-lg   ">
         <input
           disabled={disabled}
           onChange={onchange}
@@ -81,23 +81,12 @@ const Input = ({
           step="any"
           type={(!show && type) || "text"}
           className={
-            "flex-1 bg-transparent align-middle text-sm w-fit outline-none accent-green-600 break-words text-blue-600 "
+            "flex-1 bg-transparent py-2 rounded-sm align-middle text-sm w-fit outline-none  "
           }
           // placeholder={placeholder}
         />
 
-        {copy && (
-          <div
-            className="hover:cursor-pointer ml-2 hover:text-blue-500 tooltip"
-            onClick={copyText}
-            onmouseout={outFunc}
-          >
-            <span className="tooltiptext" id="myTooltip">
-              Copy to clipboard
-            </span>
-            <Copy size={15} />
-          </div>
-        )}
+       
         {type == "password" && (
           <p className="cursor-pointer" onClick={() => setShow(!show)}>
             {show ? <EyeIcon size={20} /> : <EyeOff size={20} />}

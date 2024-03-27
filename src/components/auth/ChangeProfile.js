@@ -28,7 +28,6 @@ export default function ChangeProfile({ setModal, modal }) {
       if (res?.data?.status?.success) {
         setIsloading(false);
         setModal(false);
-        resolveToast("Successfully Updated Profile");
         console.log(res, "response");
         Cookies.set("email", res?.data?.data?.email);
         Cookies.set("name", res?.data?.data?.name);
