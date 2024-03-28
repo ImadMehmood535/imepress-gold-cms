@@ -1,7 +1,7 @@
 import CustomTable from "@/components/ui/Table";
 import { Edit } from "lucide-react";
 
-const BrandTable = ({ data, getAll, handleUpdate }) => {
+const CategoryTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
@@ -21,6 +21,7 @@ const BrandTable = ({ data, getAll, handleUpdate }) => {
       sortable: true,
       grow: 3,
     },
+    
     {
       name: "Date and Time",
       selector: (row) =>
@@ -28,7 +29,6 @@ const BrandTable = ({ data, getAll, handleUpdate }) => {
           year: "numeric",
           month: "long",
           day: "numeric",
-
         }),
       sortable: true,
       grow: 1,
@@ -53,9 +53,9 @@ const BrandTable = ({ data, getAll, handleUpdate }) => {
 
   return (
     <>
-      <CustomTable columns={columns} data={data} bool={false} getAll={getAll} />
+      <CustomTable columns={columns} data={data} bool={"category"} getAll={getAll} />
     </>
   );
 };
 
-export default BrandTable;
+export default CategoryTable;

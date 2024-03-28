@@ -45,7 +45,7 @@ const CustomTable = ({ data, columns, title, setRows, bool, getAll }) => {
   const expandableRowsComponent = (props) => {
     return (
       <>
-        {bool == "boxes" ? (
+        {bool == "category" ? (
           <ExpndableBoxRow data={props?.data} getAll={getAll} />
         ) : bool == "orders" ? (
           <ExpndablesOrdersRow data={props?.data} getAll={getAll} />

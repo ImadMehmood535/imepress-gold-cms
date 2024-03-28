@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/ui/Input";
@@ -6,29 +6,30 @@ import Button from "@/components/ui/Button";
 import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
 import { BrandSchema } from "@/lib/yup-validations";
+import Select from "@/components/ui/Select";
 
-const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
+const CreateSubCategory = ({ setModal, setBrands, brands, category }) => {
+  const { resolveToast, rejectToast } = useToast();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(BrandSchema),
-    defaultValues: {
-      name: item.name,
-    },
   });
 
-  const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const updateBrandHandler = async (data) => {
+  const createBrandHandler = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.updateBrand(data, item?.id);
+      data.categoryId = parseInt(data.categoryId);
+      const res = await API.createSubCategory(data);
+      setBrands([...brands, res.data.data]);
       resolveToast(res?.data?.message);
-      setUpdateModal(false);
-      getAll();
+      setModal(false);
+      reset();
     } catch (err) {
       if (!err.response.data.success) {
         rejectToast(err.response.data.message || err.response.data.error);
@@ -41,8 +42,17 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
   };
 
   return (
-    <div className="min-w-[400px]">
-      <form onSubmit={handleSubmit(updateBrandHandler)}>
+    <div className="w-full">
+      <form onSubmit={handleSubmit(createBrandHandler)}>
+        <Select
+          label="Category"
+          name="categoryId"
+          placeholder="Select your category"
+          register={register}
+          errors={errors}
+          options={category}
+        />
+
         <Input
           label="Name"
           name="name"
@@ -50,13 +60,14 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
           register={register}
           errors={errors}
         />
+
         <div className="mt-4">
           <Button
             isLoading={isLoading}
             type="submit"
-            text="Update"
-            className="flex w-full"
             onClick={() => {}}
+            text="Create"
+            className="flex w-full"
           />
         </div>
       </form>
@@ -64,4 +75,4 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
   );
 };
 
-export default UpdateBrand;
+export default CreateSubCategory;

@@ -1,4 +1,6 @@
-import { useState } from "react";
+/** @format */
+
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/ui/Input";
@@ -7,28 +9,27 @@ import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
 import { BrandSchema } from "@/lib/yup-validations";
 
-const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
+const CreateCategory = ({ setModal, setBrands, brands }) => {
+  const { resolveToast, rejectToast } = useToast();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(BrandSchema),
-    defaultValues: {
-      name: item.name,
-    },
   });
 
-  const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const updateBrandHandler = async (data) => {
+  const createBrandHandler = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.updateBrand(data, item?.id);
+      const res = await API.createCategory(data);
+      setBrands([...brands, res.data.data]);
       resolveToast(res?.data?.message);
-      setUpdateModal(false);
-      getAll();
+      setModal(false);
+      reset();
     } catch (err) {
       if (!err.response.data.success) {
         rejectToast(err.response.data.message || err.response.data.error);
@@ -41,8 +42,8 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
   };
 
   return (
-    <div className="min-w-[400px]">
-      <form onSubmit={handleSubmit(updateBrandHandler)}>
+    <div className="w-full">
+      <form onSubmit={handleSubmit(createBrandHandler)}>
         <Input
           label="Name"
           name="name"
@@ -50,13 +51,14 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
           register={register}
           errors={errors}
         />
+
         <div className="mt-4">
           <Button
             isLoading={isLoading}
             type="submit"
-            text="Update"
-            className="flex w-full"
             onClick={() => {}}
+            text="Create"
+            className="flex w-full"
           />
         </div>
       </form>
@@ -64,4 +66,4 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
   );
 };
 
-export default UpdateBrand;
+export default CreateCategory;

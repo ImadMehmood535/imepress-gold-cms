@@ -1,7 +1,7 @@
 import CustomTable from "@/components/ui/Table";
 import { Edit } from "lucide-react";
 
-const BrandTable = ({ data, getAll, handleUpdate }) => {
+const SubCategoryTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
@@ -22,13 +22,24 @@ const BrandTable = ({ data, getAll, handleUpdate }) => {
       grow: 3,
     },
     {
+      name: "Main Category",
+      cell: (row) => {
+        return (
+          <div className="break-all text-wrap max-w-[400px]">
+            <p>{row?.categoryName}</p>
+          </div>
+        );
+      },
+      sortable: true,
+      grow: 3,
+    },
+    {
       name: "Date and Time",
       selector: (row) =>
         new Date(row?.date).toLocaleString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
-
         }),
       sortable: true,
       grow: 1,
@@ -58,4 +69,4 @@ const BrandTable = ({ data, getAll, handleUpdate }) => {
   );
 };
 
-export default BrandTable;
+export default SubCategoryTable;

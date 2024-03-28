@@ -7,7 +7,7 @@ import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
 import { BrandSchema } from "@/lib/yup-validations";
 
-const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
+const updateCategory = ({ item, getAll, setUpdateModal }) => {
   const {
     register,
     handleSubmit,
@@ -22,10 +22,10 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
   const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const updateBrandHandler = async (data) => {
+  const updateCategoryHandler = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.updateBrand(data, item?.id);
+      const res = await API.updateCategory(data, item?.id);
       resolveToast(res?.data?.message);
       setUpdateModal(false);
       getAll();
@@ -42,7 +42,7 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
 
   return (
     <div className="min-w-[400px]">
-      <form onSubmit={handleSubmit(updateBrandHandler)}>
+      <form onSubmit={handleSubmit(updateCategoryHandler)}>
         <Input
           label="Name"
           name="name"
@@ -64,4 +64,4 @@ const UpdateBrand = ({ item, getAll, setUpdateModal }) => {
   );
 };
 
-export default UpdateBrand;
+export default updateCategory;
