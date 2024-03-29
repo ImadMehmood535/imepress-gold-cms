@@ -21,7 +21,7 @@ API.interceptors.request.use(
   }
 );
 
-//auth
+//admin
 API.loginUser = (data) => {
   return API.post("admin/login", data);
 };
@@ -32,6 +32,11 @@ API.changePassword = (data) => {
 
 API.updateProfile = (data) => {
   return API.patch("admin", data);
+};
+
+// Image
+API.uploadImage = (data) => {
+  return API.post("upload", data);
 };
 
 //brand
@@ -74,6 +79,34 @@ API.createSubCategory = (data) => {
 
 API.updateSubCategory = (data, id) => {
   return API.patch(`sub-category/${id}`, data);
+};
+
+// blogs
+
+API.getAllBlogs = () => {
+  return API.get("blog");
+};
+
+API.createBlogs = (data) => {
+  return API.post("blog", data);
+};
+
+API.updateBlogs = (data, id) => {
+  return API.patch(`blog/${id}`, data);
+};
+
+API.deleteBlogs = (id) => {
+  return API.delete(`blog/${id}`);
+};
+
+//users
+
+API.getAllUsers = () => {
+  return API.get("user");
+};
+
+API.updateUserByAdmin = (data) => {
+  return API.patch(`user/${id}`, data);
 };
 
 export { API };

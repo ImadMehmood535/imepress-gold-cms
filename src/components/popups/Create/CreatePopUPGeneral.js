@@ -9,7 +9,6 @@ export default function CreatePopUPGeneral({
   setModal,
   children,
   title,
-
 }) {
   return (
     <>
@@ -45,7 +44,7 @@ export default function CreatePopUPGeneral({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel
-                  className={` max-w-7xl w-[90%] sm:w-[45%] transform  rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all`}
+                  className={` max-w-7xl w-[90%] sm:w-[50%] transform  rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all`}
                 >
                   <div
                     onClick={() => setModal(false)}
@@ -72,5 +71,3 @@ export default function CreatePopUPGeneral({
     </>
   );
 }
-
-
