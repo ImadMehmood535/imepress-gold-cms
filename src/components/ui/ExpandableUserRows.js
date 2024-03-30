@@ -15,65 +15,48 @@ const ExpndablesUserRow = ({ data, getAll }) => {
 
   return (
     <div className="w-full border px-[3%] py-6 rounded-lg ">
-      <div className="custom_shadow flex py-2 px-4 rounded-lg">
-        <div className="w-full flex-col justify-center items-center">
+      <div className="custom_shadow flex justify-between items-center w-full py-2 px-4 rounded-lg">
+        <div className="w-full    justify-center items-center">
           <div className="break-all text-wrap">
-            <h3 className="text-red-500 text-lg">Institute Details</h3>
+            <h3 className="text-red-500 text-lg">Product Details</h3>
             <div className="flex gap-2">
-              <p className="text-sm min-w-[100px]">Name:</p>
-              <p className="text-sm">{row?.current_institute}</p>
+              <p className="text-sm min-w-[100px] font-bold">Name:</p>
+              <p className="text-sm">{row?.name}</p>
+            </div>
+
+            <div className="flex gap-2">
+              <p className="text-sm min-w-[100px] font-bold">Price:</p>
+              <p className="text-sm">{row?.price}</p>
             </div>
             <div className="flex gap-2">
-              <p className="text-sm min-w-[100px]">Address:</p>
-              <p className="text-sm">{row?.address}</p>
+              <p className="text-sm min-w-[100px] font-bold">Brand:</p>
+              <p className="text-sm">{row?.brand}</p>
             </div>
             <div className="flex gap-2">
-              <p className="text-sm min-w-[100px]">Postal Code:</p>
-              <p className="text-sm">{row?.postal_code}</p>
-            </div>
-            <div className="flex gap-2">
-              <p className="text-sm min-w-[100px]">City:</p>
-              <p className="text-sm">{row?.city}</p>
-            </div>
-            <div className="flex gap-2">
-              <p className="text-sm min-w-[100px]">State:</p>
+              <p className="text-sm min-w-[100px] font-bold">State:</p>
               <p className="text-sm">{"Colorado"}</p>
             </div>
             <div className="flex gap-2">
-              <p className="text-sm min-w-[100px]">Country:</p>
-              <p className="text-sm">{"United States of America"}</p>
-            </div>
-          </div>
-          <div className="break-all mt-4 text-wrap">
-            <h3 className="text-red-500 text-lg">Sponsorship Details</h3>
-            <div className="flex gap-2">
-              <p className="text-sm min-w-[200px] ">Requirements:</p>
-              <p className="text-sm">{row?.requirements || "-"}</p>
+              <p className="text-sm min-w-[100px] font-bold">Category:</p>
+              <p className="text-sm">{row?.category}</p>
             </div>
             <div className="flex gap-2">
-              <p className="text-sm min-w-[200px] ">Requirement Details:</p>
-              <p className="text-sm">{row?.requirement_details || "-"}</p>
-            </div>
-            <div className="flex gap-2">
-              <p className="text-sm min-w-[200px] ">Requirement Description:</p>
-              <p className="text-sm">{row?.requirement_description || "-"}</p>
-            </div>
-            <div className="flex gap-2 mt-2">
-              <Button
-                onClick={() => {
-                  setUpdateModal(true);
-                  setItem(row);
-                }}
-                text={"Edit Details"}
-                className="h-2 hover:bg-orange-500"
-              />
+              <p className="text-sm min-w-[100px] font-bold">subCategory:</p>
+              <p className="text-sm">{row?.subCategory}</p>
             </div>
           </div>
         </div>
-        <div className="w-full flex-col justify-center items-center">
+        <div className="pr-[3%]  ">
           <div className="break-all text-wrap">
-            <h3 className="text-red-500 text-lg">User Box Details</h3>
-            <div className="flex gap-2 mt-4">
+            <Image
+              src={row?.imageUrl}
+              alt="productImage"
+              width={300}
+              height={300}
+              className="rounded-lg"
+            />
+            {/* <h3 className="text-red-500 text-lg">User Box Details</h3> */}
+            {/* <div className="flex gap-2 mt-4">
               <Button
                 text={"View Details"}
                 onClick={() => {
@@ -82,11 +65,11 @@ const ExpndablesUserRow = ({ data, getAll }) => {
                 }}
                 className={`h-2 hover:bg-red-400 outline:none`}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-      {updateModal && (
+      {/* {updateModal && (
         <CreatePopUp
           title="Update Sponsorship Details"
           modal={updateModal}
@@ -103,7 +86,7 @@ const ExpndablesUserRow = ({ data, getAll }) => {
         <CreatePopUp title="User Box Details" modal={modal} setModal={setModal}>
           <UserBoxDetails data={item} getAll={getAll} setModal={setModal} />
         </CreatePopUp>
-      )}
+      )} */}
     </div>
   );
 };

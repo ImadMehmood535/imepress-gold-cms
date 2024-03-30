@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -5,48 +7,48 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
-import { updateBoxesSchema } from "@/lib/yup-validations";
+import { BoxSchema } from "@/lib/yup-validations";
 import TextArea from "@/components/ui/TextArea";
 import { Switch } from "@headlessui/react";
 import Select from "@/components/ui/Select";
 
-const UpdateBox = ({ item, getAll, setUpdateModal, boxType }) => {
+const CreateProduct = ({ setModal, getAll, boxType }) => {
+  const { resolveToast, rejectToast } = useToast();
   const {
     register,
+    handleSubmit,
+    reset,
     watch,
     setValue,
-    handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(updateBoxesSchema),
-    defaultValues: {
-      item_quantity: item.item_quantity,
-      title: item?.title,
-      item_name: item?.item_name,
-      details: item?.details,
-      price: item?.price,
-      type_id: item?.type_id,
-      length: item?.length,
-      width: item?.width,
-      height: item?.height,
-      weight: item?.weight,
-    },
+    resolver: yupResolver(BoxSchema),
   });
 
-  const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const updateBox = async (data) => {
+
+  const createBox = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.updateBox(item?.id, data);
-      resolveToast(res?.data?.message);
-      setUpdateModal(false);
+      let formData = new FormData();
+      formData.append("box", data?.image[0]);
+      const resImg = await API.uploadImage(formData);
+      delete data.image;
+      data.image = resImg?.data?.data[0];
+      data.length = Number(data.length);
+      data.width = Number(data.width);
+      data.height = Number(data.height);
+      data.weight = Number(data.weight);
+      const res = await API.createBox(data);
       getAll();
+      resolveToast(res?.data?.message);
+      reset();
+      setModal(false);
     } catch (err) {
       if (!err.response.data.success) {
-        rejectToast(err.response.data.message || err.response.data.error);
+        rejectToast(err?.response?.data?.message || err?.response?.data?.error);
       } else {
-        rejectToast(err.message);
+        rejectToast(err?.message);
       }
     } finally {
       setIsLoading(false);
@@ -54,8 +56,8 @@ const UpdateBox = ({ item, getAll, setUpdateModal, boxType }) => {
   };
 
   return (
-    <div className="min-w-[400px]">
-      <form onSubmit={handleSubmit(updateBox)}>
+    <div className="w-full">
+      <form onSubmit={handleSubmit(createBox)}>
         <Input
           label="Title"
           name="title"
@@ -100,34 +102,37 @@ const UpdateBox = ({ item, getAll, setUpdateModal, boxType }) => {
             Brands
           </label>
           <Switch
-            checked={item?.is_brand || watch("is_brand") || false} // Use watch from react-hook-form to get the value
+            checked={watch("is_brand") || false} // Use watch from react-hook-form to get the value
             onChange={(checked) => setValue("is_brand", checked)}
-            className={`${
-              item?.is_brand || watch("is_brand")
-                ? "bg-[#4c8bf5]"
-                : "bg-gray-400"
-            }
+            className={`${watch("is_brand") ? "bg-[#4c8bf5]" : "bg-gray-400"}
     relative inline-flex h-[30px] w-[66px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
           >
             <span className="sr-only">Use setting</span>
             <span
               aria-hidden="true"
               className={`${
-                item?.is_brand || watch("is_brand")
-                  ? "translate-x-9 "
-                  : "translate-x-0"
+                watch("is_brand") ? "translate-x-9 " : "translate-x-0"
               }
       pointer-events-none inline-block h-[26px] w-[26px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
             />
           </Switch>
         </div>
-        <Select
+        {/* <Select
           label="Type"
           name="type_id"
           placeholder="Dispatch"
           register={register}
           errors={errors}
           options={boxType}
+        /> */}
+
+        <Input
+          label="Picture"
+          name="image"
+          placeholder="Dispatch"
+          register={register}
+          errors={errors}
+          type={"file"}
         />
         <Input
           label="Length (inch.)"
@@ -167,7 +172,7 @@ const UpdateBox = ({ item, getAll, setUpdateModal, boxType }) => {
             isLoading={isLoading}
             type="submit"
             onClick={() => {}}
-            text="Update"
+            text="Create"
             className="flex w-full"
           />
         </div>
@@ -176,4 +181,4 @@ const UpdateBox = ({ item, getAll, setUpdateModal, boxType }) => {
   );
 };
 
-export default UpdateBox;
+export default CreateProduct;

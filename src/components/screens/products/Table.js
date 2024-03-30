@@ -5,80 +5,84 @@ import CustomTable from "@/components/ui/Table";
 import { DeleteIcon } from "@/components/ui/TableComponents/DeleteIcon";
 import { useToast } from "@/hooks/useToast";
 import { Edit } from "lucide-react";
+import Image from "next/image";
 
-const BoxesTable = ({ data, getAll, handleUpdate }) => {
-  const { resolveToast, rejectToast } = useToast();
-
+const ProductTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
-      selector: (row) => row?.id,
+      selector: (row) => row?.no,
       sortable: true,
       grow: 0,
     },
+    {
+      name: "Image",
+      cell: (row) => {
+        return (
+          <div className="break-all text-wrap max-w-[400px]">
+            <Image
+              src={row?.imageUrl}
+              alt="blog"
+              width={400}
+              height={400}
+              className="max-w-[150px] py-3  "
+            />
+          </div>
+        );
+      },
+      sortable: true,
+      grow: 1.5,
+    },
+
     {
       name: "Title",
       cell: (row) => {
         return (
           <div className="break-all text-wrap">
-            <p>{row?.title}</p>
+            <p>{row?.name}</p>
           </div>
         );
       },
       sortable: true,
       grow: 1,
     },
+
+    // {
+    //   name: "Category",
+    //   cell: (row) => {
+    //     return (
+    //       <div className="break-all text-wrap">
+    //         <p>{row?.type}</p>
+    //       </div>
+    //     );
+    //   },
+    //   sortable: true,
+    //   grow: 1,
+    // },
+    // {
+    //   name: "Subcategory",
+    //   cell: (row) => {
+    //     return (
+    //       <div className="break-all text-wrap ">
+    //         <p>{row?.subCategory}</p>
+    //       </div>
+    //     );
+    //   },
+    //   grow: 1,
+    // },
     {
-      name: "Name",
+      name: "Brand",
       cell: (row) => {
         return (
           <div className="break-all text-wrap">
-            <p>{row?.item_name}</p>
+            <p>{row?.brand}</p>
           </div>
         );
       },
       sortable: true,
       grow: 1,
     },
-    {
-      name: "Type",
-      cell: (row) => {
-        return (
-          <div className="break-all text-wrap">
-            <p>{row?.type}</p>
-          </div>
-        );
-      },
-      sortable: true,
-      grow: 1,
-    },
-    {
-      name: "Brands",
-      cell: (row) => {
-        return (
-          <div className="break-all text-wrap">
-            <p className="flex flex-col">
-              {row?.brands?.map((i) => {
-                return <p>{i?.name}</p>;
-              })}
-            </p>
-          </div>
-        );
-      },
-      sortable: true,
-      grow: 1,
-    },
-    {
-      name: "Quantity",
-      cell: (row) => {
-        return (
-          <div className="break-all text-wrap ">
-            <p>{row?.item_quantity}</p>
-          </div>
-        );
-      },
-      grow: 1,
-    },
+
     {
       name: "Price",
       cell: (row) => {
@@ -112,11 +116,11 @@ const BoxesTable = ({ data, getAll, handleUpdate }) => {
       <CustomTable
         columns={columns}
         data={data}
-        bool={"boxes"}
+        bool={"product"}
         getAll={getAll}
       />
     </>
   );
 };
 
-export default BoxesTable;
+export default ProductTable;

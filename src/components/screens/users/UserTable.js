@@ -1,11 +1,11 @@
 import { API } from "@/Api";
 import CustomTable from "@/components/ui/Table";
-import { Button } from "@nextui-org/react";
+import { useToast } from "@/hooks/useToast";
+import { Button, Tooltip } from "@nextui-org/react";
 import { BadgeX, Edit } from "lucide-react";
 import Image from "next/image";
 
-const UsersTable = ({ data, getUsers }) => {
-  console.log(data, "firstNamefirstName");
+const UsersTable = ({ data, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
@@ -34,18 +34,6 @@ const UsersTable = ({ data, getUsers }) => {
       grow: 0,
     },
     {
-      name: "Email",
-      cell: (row) => {
-        return (
-          <div className="w-20 my-1">
-            <p className="whitespace-nowrap">{row?.email}</p>
-          </div>
-        );
-      },
-      sortable: true,
-      grow: 1,
-    },
-    {
       name: "Full Name",
       cell: (row) => {
         return (
@@ -57,6 +45,19 @@ const UsersTable = ({ data, getUsers }) => {
       sortable: true,
       grow: 1,
     },
+    {
+      name: "Email",
+      cell: (row) => {
+        return (
+          <div className="w-20 my-1">
+            <p className="whitespace-nowrap">{row?.email}</p>
+          </div>
+        );
+      },
+      sortable: true,
+      grow: 1,
+    },
+
     {
       name: "Phone Number",
       cell: (row) => {
@@ -83,12 +84,31 @@ const UsersTable = ({ data, getUsers }) => {
       grow: 1.5,
     },
     {
-      name: "Buttons",
+      name: "Status",
       button: true,
       cell: (row) => {
         return (
           <div className="flex justify-around min-w-[5rem]">
-            <Button className={`bg-green-600 max-w-[100px] w-full py-2 text-white  rounded-md`}> Active</Button>
+            <Tooltip
+              color="warning"
+              content={`${
+                row?.isBlocked ? "Click to Unblock" : "Click to Block"
+              }`}
+              className={`${
+                row?.isBlocked ? "bg-green-600" : "bg-red-600"
+              } p-3 rounded-lg text-white`}
+            >
+              <Button
+                onClick={() =>
+                  handleUpdate({ id: row?.id, isBlocked: !row?.isBlocked })
+                }
+                className={`${
+                  row?.isBlocked ? "bg-red-600" : " bg-green-600"
+                }    max-w-[100px] w-full py-2 text-white  rounded-md`}
+              >
+                {row?.isBlocked ? "Blocked" : "Active"}
+              </Button>
+            </Tooltip>
           </div>
         );
       },

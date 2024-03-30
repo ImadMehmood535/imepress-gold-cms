@@ -21,7 +21,7 @@ const CustomTable = ({ data, columns, title, setRows, bool, getAll }) => {
 
   const filteredItems = data?.filter(
     (item) =>
-      JSON.stringify(item?.name)
+      JSON.stringify(item?.name ? item?.name : item?.User?.name)
         .toLowerCase()
         .indexOf(filterText.toLowerCase()) !== -1
   );
@@ -52,7 +52,7 @@ const CustomTable = ({ data, columns, title, setRows, bool, getAll }) => {
           <ExpndablesOrdersRow data={props?.data} getAll={getAll} />
         ) : bool == "community" ? (
           <ExpndableCommunityRow data={props?.data} getAll={getAll} />
-        ) : bool == "users" ? (
+        ) : bool == "product" ? (
           <ExpndablesUserRow data={props?.data} getAll={getAll} />
         ) : (
           bool == "subscription" && (

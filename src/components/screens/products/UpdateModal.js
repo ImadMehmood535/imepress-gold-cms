@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,48 +5,48 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
-import { BoxSchema } from "@/lib/yup-validations";
+import { updateBoxesSchema } from "@/lib/yup-validations";
 import TextArea from "@/components/ui/TextArea";
 import { Switch } from "@headlessui/react";
 import Select from "@/components/ui/Select";
 
-const CreateBox = ({ setModal, getAll, boxType }) => {
-  const { resolveToast, rejectToast } = useToast();
+const UpdateProduct = ({ item, getAll, setUpdateModal, boxType }) => {
   const {
     register,
-    handleSubmit,
-    reset,
     watch,
     setValue,
+    handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(BoxSchema),
+    resolver: yupResolver(updateBoxesSchema),
+    defaultValues: {
+      item_quantity: item.item_quantity,
+      title: item?.title,
+      item_name: item?.item_name,
+      details: item?.details,
+      price: item?.price,
+      type_id: item?.type_id,
+      length: item?.length,
+      width: item?.width,
+      height: item?.height,
+      weight: item?.weight,
+    },
   });
 
+  const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-
-  const createBox = async (data) => {
+  const updateBox = async (data) => {
     try {
       setIsLoading(true);
-      let formData = new FormData();
-      formData.append("box", data?.image[0]);
-      const resImg = await API.uploadImage(formData);
-      delete data.image;
-      data.image = resImg?.data?.data[0];
-      data.length = Number(data.length);
-      data.width = Number(data.width);
-      data.height = Number(data.height);
-      data.weight = Number(data.weight);
-      const res = await API.createBox(data);
-      getAll();
+      const res = await API.updateBox(item?.id, data);
       resolveToast(res?.data?.message);
-      reset();
-      setModal(false);
+      setUpdateModal(false);
+      getAll();
     } catch (err) {
       if (!err.response.data.success) {
-        rejectToast(err?.response?.data?.message || err?.response?.data?.error);
+        rejectToast(err.response.data.message || err.response.data.error);
       } else {
-        rejectToast(err?.message);
+        rejectToast(err.message);
       }
     } finally {
       setIsLoading(false);
@@ -56,8 +54,8 @@ const CreateBox = ({ setModal, getAll, boxType }) => {
   };
 
   return (
-    <div className="w-full">
-      <form onSubmit={handleSubmit(createBox)}>
+    <div className="min-w-[400px]">
+      <form onSubmit={handleSubmit(updateBox)}>
         <Input
           label="Title"
           name="title"
@@ -102,16 +100,22 @@ const CreateBox = ({ setModal, getAll, boxType }) => {
             Brands
           </label>
           <Switch
-            checked={watch("is_brand") || false} // Use watch from react-hook-form to get the value
+            checked={item?.is_brand || watch("is_brand") || false} // Use watch from react-hook-form to get the value
             onChange={(checked) => setValue("is_brand", checked)}
-            className={`${watch("is_brand") ? "bg-[#4c8bf5]" : "bg-gray-400"}
+            className={`${
+              item?.is_brand || watch("is_brand")
+                ? "bg-[#4c8bf5]"
+                : "bg-gray-400"
+            }
     relative inline-flex h-[30px] w-[66px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
           >
             <span className="sr-only">Use setting</span>
             <span
               aria-hidden="true"
               className={`${
-                watch("is_brand") ? "translate-x-9 " : "translate-x-0"
+                item?.is_brand || watch("is_brand")
+                  ? "translate-x-9 "
+                  : "translate-x-0"
               }
       pointer-events-none inline-block h-[26px] w-[26px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
             />
@@ -124,15 +128,6 @@ const CreateBox = ({ setModal, getAll, boxType }) => {
           register={register}
           errors={errors}
           options={boxType}
-        />
-
-        <Input
-          label="Picture"
-          name="image"
-          placeholder="Dispatch"
-          register={register}
-          errors={errors}
-          type={"file"}
         />
         <Input
           label="Length (inch.)"
@@ -172,7 +167,7 @@ const CreateBox = ({ setModal, getAll, boxType }) => {
             isLoading={isLoading}
             type="submit"
             onClick={() => {}}
-            text="Create"
+            text="Update"
             className="flex w-full"
           />
         </div>
@@ -181,4 +176,4 @@ const CreateBox = ({ setModal, getAll, boxType }) => {
   );
 };
 
-export default CreateBox;
+export default UpdateProduct;

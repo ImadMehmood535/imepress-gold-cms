@@ -106,7 +106,20 @@ API.getAllUsers = () => {
 };
 
 API.updateUserByAdmin = (data) => {
-  return API.patch(`user/${id}`, data);
+  return API.patch(`user`, data);
 };
+
+
+//order
+
+API.getOrders = () =>{
+  return API.get("order")
+}
+
+//
+
+API.getProducts = () =>{
+  return API.get("product")
+}
 
 export { API };

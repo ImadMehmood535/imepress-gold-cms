@@ -7,7 +7,7 @@ const BlogsTable = ({ data, getAll, handleUpdate, handleDelete }) => {
   const columns = [
     {
       name: "Id",
-      selector: (row) => row?.id,
+      selector: (row) => row?.no,
       sortable: true,
       grow: 0,
     },

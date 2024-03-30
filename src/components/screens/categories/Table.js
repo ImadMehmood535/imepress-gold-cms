@@ -5,7 +5,7 @@ const CategoryTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
-      selector: (row) => row?.id,
+      selector: (row) => row?.no,
       sortable: true,
       grow: 0,
     },
@@ -21,7 +21,7 @@ const CategoryTable = ({ data, getAll, handleUpdate }) => {
       sortable: true,
       grow: 3,
     },
-    
+
     {
       name: "Date and Time",
       selector: (row) =>
@@ -53,7 +53,12 @@ const CategoryTable = ({ data, getAll, handleUpdate }) => {
 
   return (
     <>
-      <CustomTable columns={columns} data={data} bool={"category"} getAll={getAll} />
+      <CustomTable
+        columns={columns}
+        data={data}
+        bool={"category"}
+        getAll={getAll}
+      />
     </>
   );
 };

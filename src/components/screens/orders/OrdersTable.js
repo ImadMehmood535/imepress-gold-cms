@@ -8,39 +8,38 @@ const OrdersTable = ({ data, getAll }) => {
   const columns = [
     {
       name: "Id",
-      selector: (row) => row?.id,
+      selector: (row) => row?.no,
       sortable: true,
       grow: 0,
     },
     {
-      name: "Email",
-      selector: (row) => row?.email,
+      name: "Total Price",
+      selector: (row) => row?.totalPrice,
       sortable: true,
       grow: 2,
     },
     {
-      name: "Packs",
-      selector: (row) => row?.order_details?.length,
+      name: "Total Items",
+      selector: (row) => row?.orderItems?.length,
       sortable: true,
       grow: 2,
     },
     {
-      name: "Created at",
-      selector: (row) => row?.created_at?.slice(0, 10),
+      name: "Customer Name",
+      selector: (row) => row?.User?.name,
       sortable: true,
       grow: 2,
     },
     {
-      name: "Net Amount",
-      selector: (row) => row?.net_amount,
+      name: "Date and Time",
+      selector: (row) =>
+        new Date(row?.date).toLocaleString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
       sortable: true,
-      grow: 2,
-    },
-    {
-      name: "Status",
-      selector: (row) => row?.status,
-      sortable: true,
-      grow: 2,
+      grow: 1,
     },
   ];
 
