@@ -61,11 +61,9 @@ const Select = ({
             "flex-1 bg-transparent align-middle text-sm w-fit outline-none accent-green-600 break-words text-blue-600 "
           }
           disabled={disabled}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
         >
-          <option value="">
-            please select
-          </option>
+          <option value="">please select</option>
           {optionsData?.map((i) => {
             return (
               <option value={i?.id} key={i?.name}>

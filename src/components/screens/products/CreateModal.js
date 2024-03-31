@@ -12,7 +12,13 @@ import TextArea from "@/components/ui/TextArea";
 import { Switch } from "@headlessui/react";
 import Select from "@/components/ui/Select";
 
-const CreateProduct = ({ setModal, getAll, boxType }) => {
+const CreateProduct = ({
+  setModal,
+  getAll,
+  brands,
+  categories,
+  subCategories,
+}) => {
   const { resolveToast, rejectToast } = useToast();
   const {
     register,
@@ -26,105 +32,97 @@ const CreateProduct = ({ setModal, getAll, boxType }) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [filterId, setFilterId] = useState(null);
 
   const createBox = async (data) => {
     try {
+      console.log(data, "data");
       setIsLoading(true);
       let formData = new FormData();
-      formData.append("box", data?.image[0]);
+      formData.append("image", data?.image[0]);
+
       const resImg = await API.uploadImage(formData);
+
       delete data.image;
-      data.image = resImg?.data?.data[0];
-      data.length = Number(data.length);
-      data.width = Number(data.width);
-      data.height = Number(data.height);
-      data.weight = Number(data.weight);
-      const res = await API.createBox(data);
+      delete data.categoryId;
+      const res = await API.addProduct({
+        ...data,
+        imageUrl: resImg?.data?.data,
+      });
+
       getAll();
       resolveToast(res?.data?.message);
       reset();
       setModal(false);
     } catch (err) {
-      if (!err.response.data.success) {
-        rejectToast(err?.response?.data?.message || err?.response?.data?.error);
-      } else {
-        rejectToast(err?.message);
-      }
+      console.log(err);
+      rejectToast(err?.response?.data?.message[0]);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleFilterId = (id) => {
+    setFilterId(id);
+  };
+
+  const filterCategories = subCategories?.filter(
+    (item) => item?.categoryId === Number(filterId)
+  );
+
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit(createBox)}>
         <Input
-          label="Title"
-          name="title"
+          label="Name"
+          name="name"
           placeholder="Dispatch"
           register={register}
           errors={errors}
         />
+        <Select
+          label="Brand"
+          name="brandId"
+          placeholder="Select your Brand"
+          register={register}
+          errors={errors}
+          options={brands}
+          onChange={() => null}
+        />
+        <Select
+          label="Category"
+          name="categoryId"
+          placeholder="Select your Category"
+          register={register}
+          errors={errors}
+          options={categories}
+          onChange={handleFilterId}
+        />
+
+        <Select
+          label="Sub Category"
+          name="subCategoryId"
+          placeholder="Select your Sub-Category"
+          register={register}
+          errors={errors}
+          options={filterCategories}
+          onChange={() => null}
+        />
         <Input
-          label="Item Name"
-          name="item_name"
+          label="Price"
+          name="price"
+          type={"number"}
           placeholder="Dispatch"
           register={register}
           errors={errors}
         />
         <TextArea
-          label="Detail"
-          name="details"
-          placeholder="Dispatch"
-          register={register}
-          errors={errors}
-          required={true}
-        />
-        <Input
-          label="Price"
-          name="price"
+          label="Description"
+          name="description"
           placeholder="Dispatch"
           register={register}
           errors={errors}
         />
-        <Input
-          label="Item quantity"
-          name="item_quantity"
-          placeholder="Dispatch"
-          register={register}
-          errors={errors}
-        />
-        <div className="border mt-4 px-4 relative py-2 pb-1 rounded-lg bg-gray-200/95">
-          <label
-            htmlFor={"active"}
-            className="relative flex flex-1 py-2 items-center  text-sm"
-          >
-            Brands
-          </label>
-          <Switch
-            checked={watch("is_brand") || false} // Use watch from react-hook-form to get the value
-            onChange={(checked) => setValue("is_brand", checked)}
-            className={`${watch("is_brand") ? "bg-[#4c8bf5]" : "bg-gray-400"}
-    relative inline-flex h-[30px] w-[66px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
-          >
-            <span className="sr-only">Use setting</span>
-            <span
-              aria-hidden="true"
-              className={`${
-                watch("is_brand") ? "translate-x-9 " : "translate-x-0"
-              }
-      pointer-events-none inline-block h-[26px] w-[26px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-            />
-          </Switch>
-        </div>
-        {/* <Select
-          label="Type"
-          name="type_id"
-          placeholder="Dispatch"
-          register={register}
-          errors={errors}
-          options={boxType}
-        /> */}
 
         <Input
           label="Picture"
@@ -134,39 +132,6 @@ const CreateProduct = ({ setModal, getAll, boxType }) => {
           errors={errors}
           type={"file"}
         />
-        <Input
-          label="Length (inch.)"
-          name="length"
-          placeholder="length"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-        <Input
-          label="Width (inch.)"
-          name="width"
-          placeholder="width"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-        <Input
-          label="Thickness (inch.)"
-          name="height"
-          placeholder="Thickness"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-        <Input
-          label="Weight (pounds)"
-          name="weight"
-          placeholder="weight"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-
         <div className="mt-4">
           <Button
             isLoading={isLoading}

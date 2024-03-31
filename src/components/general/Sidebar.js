@@ -38,7 +38,6 @@ const Sidebar = () => {
 
   const { resolveToast, rejectToast } = useToast();
   const { authState, authDispatch } = useAuth();
-  console.log(authState);
   const path = usePathname();
   const router = useRouter();
   const handleLogout = () => {

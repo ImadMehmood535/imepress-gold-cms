@@ -71,7 +71,7 @@ const page = () => {
           <Loading />
         ) : (
           <NoContent
-            type="Brands"
+            type="Users"
             onClick={() => setModal(true)}
             icon={<Blocks className="w-[5rem] h-[5rem] stroke-[1.3]" />}
           />

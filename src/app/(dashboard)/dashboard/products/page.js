@@ -23,6 +23,9 @@ const page = () => {
   const { authState } = useAuth();
   const router = useRouter();
   const [brands, setBrands] = useState([]);
+  const [allBrands, setAllBrands] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [subCategories, setSubCategories] = useState(null);
   const [modal, setModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [item, setItem] = useState();
@@ -38,6 +41,22 @@ const page = () => {
       setLoader(false);
     }
   };
+  const getAllSelects = async () => {
+    try {
+      setLoader(true);
+      const res = await API.getAllBrands();
+      setAllBrands(res?.data?.data);
+
+      const response = await API.getCategorirs();
+      setCategories(response?.data?.data);
+
+      const response2 = await API.getAllSubCategory();
+      setSubCategories(response2?.data?.data);
+    } catch (err) {
+    } finally {
+      setLoader(false);
+    }
+  };
 
   const handleUpdate = (row) => {
     setItem(row);
@@ -46,6 +65,7 @@ const page = () => {
 
   useEffect(() => {
     getAll();
+    getAllSelects();
   }, []);
 
   if (!authState.loading && !authState.role === "admin") {
@@ -85,11 +105,18 @@ const page = () => {
           />
         )}
       </section>
-      <CreatePopUPGeneral title="Create Product" modal={modal} setModal={setModal}>
+      <CreatePopUPGeneral
+        title="Create Product"
+        modal={modal}
+        setModal={setModal}
+      >
         <CreateProduct
           setModal={setModal}
+          getAll={getAll}
           setBrands={setBrands}
-          brands={brands}
+          brands={allBrands}
+          categories={categories}
+          subCategories={subCategories}
         />
       </CreatePopUPGeneral>
       <CreatePopUPGeneral

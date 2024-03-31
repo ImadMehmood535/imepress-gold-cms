@@ -21,6 +21,11 @@ API.interceptors.request.use(
   }
 );
 
+// Image
+API.uploadImage = (data) => {
+  return API.post("upload", data);
+};
+
 //admin
 API.loginUser = (data) => {
   return API.post("admin/login", data);
@@ -32,11 +37,6 @@ API.changePassword = (data) => {
 
 API.updateProfile = (data) => {
   return API.patch("admin", data);
-};
-
-// Image
-API.uploadImage = (data) => {
-  return API.post("upload", data);
 };
 
 //brand
@@ -57,6 +57,10 @@ API.updateBrand = (data, id) => {
 
 API.getAllCategpries = () => {
   return API.get("category/all");
+};
+
+API.getCategorirs = () => {
+  return API.get("category");
 };
 
 API.createCategory = (data) => {
@@ -109,17 +113,19 @@ API.updateUserByAdmin = (data) => {
   return API.patch(`user`, data);
 };
 
-
 //order
 
-API.getOrders = () =>{
-  return API.get("order")
-}
+API.getOrders = () => {
+  return API.get("order");
+};
 
-//
+// product
 
-API.getProducts = () =>{
-  return API.get("product")
-}
+API.getProducts = () => {
+  return API.get("product");
+};
+API.addProduct = (data) => {
+  return API.post("product", data);
+};
 
 export { API };

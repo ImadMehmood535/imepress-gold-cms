@@ -84,46 +84,17 @@ export const sponsorDetailsSchema = yup.object().shape({
 });
 
 export const BoxSchema = yup.object().shape({
-  title: yup
-    .string()
-    .required("Title is required")
-    .test("maxWord", "Exceeded maximum word limit of 60 words", (value) => {
-      const words = value.trim().split(/\s+/);
-      return words.length <= 60;
-    }),
-  item_name: yup
-    .string()
-    .required("Item name is required")
-    .test("maxWord", "Exceeded maximum word limit of 60 words", (value) => {
-      const words = value.trim().split(/\s+/);
-      return words.length <= 60;
-    }),
-  details: yup.string().required("Detail is required"),
+  name: yup.string().required("Title is required"),
+  description: yup.string().required("description is required"),
+  brandId: yup.number().required("Brand is required"),
+  categoryId: yup.number().required("Category is required"),
+  subCategoryId: yup.number().required("Sub Category is required"),
   price: yup.number().min(1).required("Price is required"),
-  item_quantity: yup
-    .number("must be number")
-    .min(1)
-    .required("Quantity is required"),
-  is_brand: yup.boolean().default(false),
-  type_id: yup.number("must be number").min(1).required("Type is required"),
   image: yup
     .mixed()
     .test("fileSize", "png and jpeg image required", (value) => {
       return value && value.length > 0;
-    })
-    .test(
-      "fileType",
-      "Invalid file format. Only PNG or JPEG/JPG allowed.",
-      (value) => {
-        if (!value) return true;
-        const supportedFormats = ["image/png", "image/jpeg", "image/jpg"];
-        return supportedFormats.includes(value[0]?.type);
-      }
-    ),
-  length: yup.number().min(1).required("length is required"),
-  width: yup.number().min(1).required("width is required"),
-  height: yup.number().min(1).required("height is required"),
-  weight: yup.number().min(1).required("weight is required"),
+    }),
 });
 
 export const updateBoxesSchema = yup.object().shape({
