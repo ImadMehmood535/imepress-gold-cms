@@ -7,7 +7,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
-import { BoxSchema } from "@/lib/yup-validations";
+import { BoxSchema, productSchema } from "@/lib/yup-validations";
 import TextArea from "@/components/ui/TextArea";
 import { Switch } from "@headlessui/react";
 import Select from "@/components/ui/Select";
@@ -28,7 +28,7 @@ const CreateProduct = ({
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(BoxSchema),
+    resolver: yupResolver(productSchema),
   });
 
   const [isLoading, setIsLoading] = useState(false);

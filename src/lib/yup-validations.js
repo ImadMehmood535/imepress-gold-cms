@@ -83,7 +83,20 @@ export const sponsorDetailsSchema = yup.object().shape({
     .required("Requirement Description is required"),
 });
 
-export const BoxSchema = yup.object().shape({
+export const productSchema = yup.object().shape({
+  name: yup.string().required("Title is required"),
+  description: yup.string().required("description is required"),
+  brandId: yup.number().required("Brand is required"),
+  categoryId: yup.number().required("Category is required"),
+  subCategoryId: yup.number().required("Sub Category is required"),
+  price: yup.number().min(1).required("Price is required"),
+  image: yup
+    .mixed()
+    .test("fileSize", "png and jpeg image required", (value) => {
+      return value && value.length > 0;
+    }),
+});
+export const updateProductSchema = yup.object().shape({
   name: yup.string().required("Title is required"),
   description: yup.string().required("description is required"),
   brandId: yup.number().required("Brand is required"),

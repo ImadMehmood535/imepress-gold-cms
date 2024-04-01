@@ -128,4 +128,8 @@ API.addProduct = (data) => {
   return API.post("product", data);
 };
 
+API.updateProduct = (id , data) => {
+  return API.patch(`product/${id}`, data);
+};
+
 export { API };

@@ -1,55 +1,95 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
-import { updateBoxesSchema } from "@/lib/yup-validations";
-import TextArea from "@/components/ui/TextArea";
-import { Switch } from "@headlessui/react";
 import Select from "@/components/ui/Select";
+import { parse } from "postcss";
 
-const UpdateProduct = ({ item, getAll, setUpdateModal, boxType }) => {
+const UpdateProduct = ({
+  item,
+  getAll,
+  setUpdateModal,
+  brands,
+  categories,
+  subCategories,
+}) => {
   const {
     register,
-    watch,
-    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(updateBoxesSchema),
     defaultValues: {
-      item_quantity: item.item_quantity,
-      title: item?.title,
-      item_name: item?.item_name,
-      details: item?.details,
-      price: item?.price,
-      type_id: item?.type_id,
-      length: item?.length,
-      width: item?.width,
-      height: item?.height,
-      weight: item?.weight,
+      name: item.name,
+      brandId: item.brandId,
+      categoryId: item.categoryId,
+      subCategoryId: item.subCategoryId,
+      price: item.price,
+      description: item.description,
+      imageUrl: item?.imageUrl,
     },
   });
 
   const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [filterId, setFilterId] = useState(item.categoryId);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleFilterId = (id) => {
+    setFilterId(id);
+  };
+
+  const filterCategories = subCategories?.filter(
+    (item) => item.categoryId === Number(filterId)
+  );
+
+
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageData, setImageData] = useState("");
+
+
   const updateBox = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.updateBox(item?.id, data);
-      resolveToast(res?.data?.message);
+      let imageUrlToUpdate = data?.imageUrl
+ 
+      console.log(selectedImage, "selectedImage");
+
+      if (imageData) {
+        console.log("hit");
+        const formData = new FormData();
+        formData.append("image", imageData);
+        const resImg = await API.uploadImage(formData);
+        imageUrlToUpdate = resImg?.data?.data;
+      }
+
+      delete data.categoryId;
+      delete data.imageUrl;
+      data.price = parseInt(data.price);
+      await API.updateProduct(item.id, {
+        ...data,
+        imageUrl: imageUrlToUpdate,
+      });
+      resolveToast("Successfully Updated Product");
       setUpdateModal(false);
       getAll();
     } catch (err) {
-      if (!err.response.data.success) {
-        rejectToast(err.response.data.message || err.response.data.error);
-      } else {
-        rejectToast(err.message);
-      }
+      rejectToast(err?.response?.data?.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageData(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -57,118 +97,82 @@ const UpdateProduct = ({ item, getAll, setUpdateModal, boxType }) => {
     <div className="min-w-[400px]">
       <form onSubmit={handleSubmit(updateBox)}>
         <Input
-          label="Title"
-          name="title"
-          placeholder="Dispatch"
+          label="Name"
+          name="name"
+          placeholder="Name"
           register={register}
           errors={errors}
         />
-        <Input
-          label="Item Name"
-          name="item_name"
-          placeholder="Dispatch"
+        <Select
+          label="Brand"
+          name="brandId"
+          placeholder="Select your Brand"
           register={register}
           errors={errors}
+          options={brands}
+          onChange={() => null}
         />
-        <TextArea
-          label="Detail"
-          name="details"
-          placeholder="Dispatch"
+        <Select
+          label="Category"
+          name="categoryId"
+          placeholder="Select your Category"
           register={register}
           errors={errors}
-          required={true}
+          options={categories}
+          onChange={handleFilterId}
+        />
+        <Select
+          label="Sub Category"
+          name="subCategoryId"
+          placeholder="Select your Sub-Category"
+          register={register}
+          errors={errors}
+          options={filterCategories}
+          onChange={() => null}
         />
         <Input
           label="Price"
           name="price"
-          placeholder="Dispatch"
+          type="number"
+          placeholder="Price"
           register={register}
           errors={errors}
         />
         <Input
-          label="Item quantity"
-          name="item_quantity"
-          placeholder="Dispatch"
+          label="Description"
+          name="description"
+          placeholder="Description"
           register={register}
           errors={errors}
         />
-        <div className="border mt-4 px-4 relative py-2 pb-1 rounded-lg bg-gray-200/95">
+        <div className="mt-4 flex justify-center items-center gap-12">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+            id="image-upload"
+          />
           <label
-            htmlFor={"active"}
-            className="relative flex flex-1 py-2 items-center  text-sm"
+            htmlFor="image-upload"
+            className="py-4 px-4 my-3 bg-black text-white rounded-md cursor-pointer"
           >
-            Brands
+           Change image
           </label>
-          <Switch
-            checked={item?.is_brand || watch("is_brand") || false} // Use watch from react-hook-form to get the value
-            onChange={(checked) => setValue("is_brand", checked)}
-            className={`${
-              item?.is_brand || watch("is_brand")
-                ? "bg-[#4c8bf5]"
-                : "bg-gray-400"
-            }
-    relative inline-flex h-[30px] w-[66px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
-          >
-            <span className="sr-only">Use setting</span>
-            <span
-              aria-hidden="true"
-              className={`${
-                item?.is_brand || watch("is_brand")
-                  ? "translate-x-9 "
-                  : "translate-x-0"
-              }
-      pointer-events-none inline-block h-[26px] w-[26px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+             <img
+              src={imagePreview || item?.imageUrl}
+              alt="Preview"
+              className="mt-2 rounded-md border border-gray-300 max-w-[200px]   w-full h  object-cover object-center "
             />
-          </Switch>
+        
         </div>
-        <Select
-          label="Type"
-          name="type_id"
-          placeholder="Dispatch"
-          register={register}
-          errors={errors}
-          options={boxType}
-        />
-        <Input
-          label="Length (inch.)"
-          name="length"
-          placeholder="length"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-        <Input
-          label="Width (inch.)"
-          name="width"
-          placeholder="width"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-        <Input
-          label="Thickness (inch.)"
-          name="height"
-          placeholder="Thickness"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-        <Input
-          label="Weight (pounds)"
-          name="weight"
-          placeholder="weight"
-          register={register}
-          errors={errors}
-          type={"number"}
-        />
-
         <div className="mt-4">
           <Button
             isLoading={isLoading}
             type="submit"
-            onClick={() => {}}
             text="Update"
             className="flex w-full"
+            onClick={() => null}
           />
         </div>
       </form>

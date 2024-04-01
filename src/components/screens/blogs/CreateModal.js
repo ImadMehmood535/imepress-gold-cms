@@ -22,8 +22,8 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  const [description, setDescription] = useState(null);
   const [imageData, setImageData] = useState("");
+  const [description, setDescription] = useState(null);
   const [validations, setValidations] = useState({
     description: false,
     image: true,

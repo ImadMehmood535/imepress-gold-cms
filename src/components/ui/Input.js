@@ -17,7 +17,7 @@ const Input = ({
   disabled,
   copy,
   newClass,
-  onchange,
+  onChange,
   refrence,
   isOpenDropdown,
   value,

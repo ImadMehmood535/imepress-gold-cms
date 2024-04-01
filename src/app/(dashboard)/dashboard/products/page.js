@@ -12,7 +12,7 @@ import withAuth from "@/components/hocs/withAuth";
 import { useAuth } from "@/store/AuthContext";
 import { useRouter } from "next/navigation";
 import BrandTable from "@/components/screens/brands/Table";
-import UpdateEvent from "@/components/screens/brands/UpdateModal";
+import UpdateEvent from "@/components/screens/products/UpdateModal";
 import Loading from "../../loading";
 import CreateBrands from "@/components/screens/brands/CreateModal";
 import CreatePopUPGeneral from "@/components/popups/Create/CreatePopUPGeneral";
@@ -125,6 +125,9 @@ const page = () => {
         setModal={setUpdateModal}
       >
         <UpdateEvent
+          brands={allBrands}
+          categories={categories}
+          subCategories={subCategories}
           item={item}
           getAll={getAll}
           setUpdateModal={setUpdateModal}
