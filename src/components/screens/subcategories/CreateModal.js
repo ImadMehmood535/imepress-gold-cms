@@ -51,6 +51,7 @@ const CreateSubCategory = ({ setModal, setBrands, brands, category }) => {
           register={register}
           errors={errors}
           options={category}
+          onChange={()=>null}
         />
 
         <Input

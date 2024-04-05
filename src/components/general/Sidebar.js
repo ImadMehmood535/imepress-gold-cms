@@ -106,6 +106,44 @@ const Sidebar = () => {
             {authState.role === "admin" && isOpen && (
               <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
                 <Link
+                  href="/dashboard/blogs"
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
+                    path == "/dashboard/blogs" && "bg-gray-100"
+                  }`}
+                >
+                  <span className="text-sm font-medium">Blogs </span>
+                </Link>
+              </nav>
+            )}
+
+            {authState.role === "admin" && isOpen && (
+              <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
+                <Link
+                  href="/dashboard/users"
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
+                    path == "/dashboard/users" && "bg-gray-100"
+                  }`}
+                >
+                  <span className="text-sm font-medium">Users </span>
+                </Link>
+              </nav>
+            )}
+            {authState.role === "admin" && isOpen && (
+              <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
+                <Link
+                  href="/dashboard/products"
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
+                    path == "/dashboard/products" && "bg-gray-100"
+                  }`}
+                >
+                  <span className="text-sm font-medium">Products </span>
+                </Link>
+              </nav>
+            )}
+
+            {authState.role === "admin" && isOpen && (
+              <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
+                <Link
                   href="/dashboard/brands"
                   className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
                     path == "/dashboard/brands" && "bg-gray-100"
@@ -139,30 +177,7 @@ const Sidebar = () => {
                 </Link>
               </nav>
             )}
-            {authState.role === "admin" && isOpen && (
-              <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
-                <Link
-                  href="/dashboard/blogs"
-                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
-                    path == "/dashboard/blogs" && "bg-gray-100"
-                  }`}
-                >
-                  <span className="text-sm font-medium">Blogs </span>
-                </Link>
-              </nav>
-            )}
-            {authState.role === "admin" && isOpen && (
-              <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
-                <Link
-                  href="/dashboard/users"
-                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
-                    path == "/dashboard/users" && "bg-gray-100"
-                  }`}
-                >
-                  <span className="text-sm font-medium">Users </span>
-                </Link>
-              </nav>
-            )}
+
             {authState.role === "admin" && isOpen && (
               <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
                 <Link
@@ -172,18 +187,6 @@ const Sidebar = () => {
                   }`}
                 >
                   <span className="text-sm font-medium">Orders </span>
-                </Link>
-              </nav>
-            )}
-            {authState.role === "admin" && isOpen && (
-              <nav aria-label="Teams Nav" className="mt-1 flex flex-col px-4">
-                <Link
-                  href="/dashboard/products"
-                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500  hover:bg-gray-100 hover:text-gray-700 ${
-                    path == "/dashboard/products" && "bg-gray-100"
-                  }`}
-                >
-                  <span className="text-sm font-medium">Products </span>
                 </Link>
               </nav>
             )}

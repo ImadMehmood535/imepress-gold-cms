@@ -27,7 +27,7 @@ const BlogsTable = ({ data, getAll, handleUpdate, handleDelete }) => {
         );
       },
       sortable: true,
-      grow: 3,
+      grow: 1,
     },
     {
       name: "Name",

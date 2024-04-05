@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/ui/Input";
@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/useToast";
 import { BrandSchema } from "@/lib/yup-validations";
 import { Editor } from "primereact/editor";
 import { toast } from "react-toastify";
+import { generateSlug } from "@/utils/slug";
 
 const CreateBlogs = ({ setModal, setBrands, brands }) => {
   const { resolveToast, rejectToast } = useToast();
@@ -15,6 +16,8 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
     register,
     handleSubmit,
     reset,
+    getValues,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(BrandSchema),
@@ -29,6 +32,7 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
     image: true,
   });
 
+  const [slugData, setSlug] = useState("");
   const createBrandHandler = async (data) => {
     try {
       setIsLoading(true);
@@ -40,6 +44,7 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
       const res = await API.createBlogs({
         ...data,
         description: description,
+        slug: generateSlug(slugData),
         imageUrl: response?.data?.data,
       });
       setBrands([...brands, res.data.data]);
@@ -65,6 +70,10 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
     }
   };
 
+  useEffect(() => {
+    setSlug(getValues("name"));
+  }, [watch("name")]);
+
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit(createBrandHandler)}>
@@ -75,6 +84,7 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
           register={register}
           errors={errors}
         />
+
         <div className="py-12">
           <div className="mt-4 flex justify-center items-center gap-12">
             <input
@@ -99,6 +109,22 @@ const CreateBlogs = ({ setModal, setBrands, brands }) => {
             )}
           </div>
         </div>
+
+        <Input
+          label="Short Description"
+          name="short_description"
+          placeholder="Enter Short Description"
+          register={register}
+          errors={errors}
+        />
+        {/* <Input
+          label="Slug"
+          name="slug"
+          placeholder="generate or enter slug"
+          register={register}
+          errors={errors}
+          value={generateSlug(slugData)}
+        /> */}
 
         <Editor
           value={description}

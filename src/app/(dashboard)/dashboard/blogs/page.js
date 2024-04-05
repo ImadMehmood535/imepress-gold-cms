@@ -100,7 +100,7 @@ const page = () => {
         )}
       </section>
       <CreatePopUPGeneral
-        title="Create Brand"
+        title="Create Blog"
         modal={modal}
         setModal={setModal}
       >

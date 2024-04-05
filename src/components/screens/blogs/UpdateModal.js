@@ -17,6 +17,8 @@ const UpdateBlog = ({ item, getAll, setUpdateModal }) => {
     resolver: yupResolver(BrandSchema),
     defaultValues: {
       name: item?.name,
+      short_description: item?.shortDescription,
+      slug: item?.slug,
     },
   });
 
@@ -103,6 +105,21 @@ const UpdateBlog = ({ item, getAll, setUpdateModal }) => {
             )}
           </div>
         </div>
+
+        <Input
+          label="Short Description"
+          name="short_description"
+          placeholder="Enter Short Description"
+          register={register}
+          errors={errors}
+        />
+        <Input
+          label="Slug"
+          name="slug"
+          placeholder="generate or enter slug"
+          register={register}
+          errors={errors}
+        />
 
         <Editor
           value={description}
