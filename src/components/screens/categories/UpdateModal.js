@@ -21,11 +21,27 @@ const updateCategory = ({ item, getAll, setUpdateModal }) => {
 
   const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [imageData, setImageData] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
 
   const updateCategoryHandler = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.updateCategory(data, item?.id);
+
+      let imageUrlToUpdate = data?.imageUrl;
+
+      if (imageData) {
+        const formData = new FormData();
+        formData.append("image", imageData);
+        const resImg = await API.uploadImage(formData);
+        imageUrlToUpdate = resImg?.data?.data;
+      }
+      delete data.imageUrl;
+
+      const res = await API.updateCategory(
+        { ...data, imageUrl: imageUrlToUpdate },
+        item?.id
+      );
       resolveToast(res?.data?.message);
       setUpdateModal(false);
       getAll();
@@ -40,6 +56,17 @@ const updateCategory = ({ item, getAll, setUpdateModal }) => {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageData(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <div className="min-w-[400px]">
       <form onSubmit={handleSubmit(updateCategoryHandler)}>
@@ -50,6 +77,28 @@ const updateCategory = ({ item, getAll, setUpdateModal }) => {
           register={register}
           errors={errors}
         />
+
+        <div className="mt-4 flex justify-center items-center gap-12">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+            id="image-upload"
+          />
+          <label
+            htmlFor="image-upload"
+            className="py-4 px-4 my-3 bg-black text-white rounded-md cursor-pointer"
+          >
+            Change image
+          </label>
+          <img
+            src={imagePreview || item?.imageUrl}
+            alt="Preview"
+            className="mt-2 rounded-md border border-gray-300 max-w-[200px]   w-full h  object-cover object-center "
+          />
+        </div>
+
         <div className="mt-4">
           <Button
             isLoading={isLoading}

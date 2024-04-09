@@ -6,6 +6,9 @@ import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
 import Select from "@/components/ui/Select";
 import { parse } from "postcss";
+import SwitchToggle from "@/components/ui/SwitchToggle";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { productSchema } from "@/lib/yup-validations";
 
 const UpdateProduct = ({
   item,
@@ -21,13 +24,18 @@ const UpdateProduct = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: item.name,
-      brandId: item.brandId,
-      categoryId: item.categoryId,
-      subCategoryId: item.subCategoryId,
-      price: item.price,
-      description: item.description,
+      name: item?.name,
+      brandId: item?.brandId,
+      categoryId: item?.categoryId,
+      subCategoryId: item?.subCategoryId,
+      price: item?.price,
+      description: item?.description,
       imageUrl: item?.imageUrl,
+      isFeatured: item?.isFeatured,
+      isSale: item?.isSale,
+      isNew: item?.isNew,
+      discount: item?.discount,
+      slug: item?.slug,
     },
   });
 
@@ -44,20 +52,15 @@ const UpdateProduct = ({
     (item) => item.categoryId === Number(filterId)
   );
 
-
   const [imagePreview, setImagePreview] = useState(null);
   const [imageData, setImageData] = useState("");
-
 
   const updateBox = async (data) => {
     try {
       setIsLoading(true);
-      let imageUrlToUpdate = data?.imageUrl
- 
-      console.log(selectedImage, "selectedImage");
+      let imageUrlToUpdate = data?.imageUrl;
 
       if (imageData) {
-        console.log("hit");
         const formData = new FormData();
         formData.append("image", imageData);
         const resImg = await API.uploadImage(formData);
@@ -67,6 +70,11 @@ const UpdateProduct = ({
       delete data.categoryId;
       delete data.imageUrl;
       data.price = parseInt(data.price);
+      data.discount = parseInt(data.discount);
+
+      data.isSale = data.isSale === "true";
+      data.isFeatured = data.isFeatured === "true";
+      data.isNew = data.isNew === "true";
       await API.updateProduct(item.id, {
         ...data,
         imageUrl: imageUrlToUpdate,
@@ -130,14 +138,53 @@ const UpdateProduct = ({
           options={filterCategories}
           onChange={() => null}
         />
+        <div className="grid grid-cols-1 md:grid-cols-3 py-6">
+          <SwitchToggle
+            name="isFeatured"
+            register={register}
+            label={"Featured"}
+            value={item?.isFeatured}
+          />
+          <SwitchToggle
+            name="isSale"
+            register={register}
+            label={"Sale"}
+            value={item?.isSale}
+          />
+          <SwitchToggle
+            name="isNew"
+            register={register}
+            label={"New"}
+            value={item?.isNew}
+          />
+        </div>
+        <div className="w-full grid grid-cols-1 md:grid-cols-2  py-6">
+          <Input
+            label="Price"
+            name="price"
+            type={"number"}
+            placeholder="Dispatch"
+            register={register}
+            errors={errors}
+          />
+          <Input
+            label="Discount"
+            name="discount"
+            type={"number"}
+            placeholder="Dispatch"
+            register={register}
+            errors={errors}
+          />
+        </div>
+
         <Input
-          label="Price"
-          name="price"
-          type="number"
-          placeholder="Price"
+          label="Slug"
+          name="slug"
+          placeholder="generate or enter slug"
           register={register}
           errors={errors}
         />
+
         <Input
           label="Description"
           name="description"
@@ -157,14 +204,13 @@ const UpdateProduct = ({
             htmlFor="image-upload"
             className="py-4 px-4 my-3 bg-black text-white rounded-md cursor-pointer"
           >
-           Change image
+            Change image
           </label>
-             <img
-              src={imagePreview || item?.imageUrl}
-              alt="Preview"
-              className="mt-2 rounded-md border border-gray-300 max-w-[200px]   w-full h  object-cover object-center "
-            />
-        
+          <img
+            src={imagePreview || item?.imageUrl}
+            alt="Preview"
+            className="mt-2 rounded-md border border-gray-300 max-w-[200px]   w-full h  object-cover object-center "
+          />
         </div>
         <div className="mt-4">
           <Button

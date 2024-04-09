@@ -3,8 +3,7 @@
 import { Copy, EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
 
-// import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-
+ 
 const Input = ({
   register,
   label,
@@ -24,24 +23,8 @@ const Input = ({
 }) => {
   const [show, setShow] = useState(false);
 
-  function outFunc() {
-    var tooltip = document.getElementById("myTooltip");
-    tooltip.innerHTML = "Copy to clipboard";
-  }
-  function copyText() {
-    // Get the text field
-    var copyText = document.getElementById(name);
-
-    // Select the text field
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text inside the text field
-    navigator?.clipboard?.writeText(copyText.value);
-
-    var tooltip = document.getElementById("myTooltip");
-    tooltip.innerHTML = "Copied";
-  }
+ 
+ 
 
   return (
     <div

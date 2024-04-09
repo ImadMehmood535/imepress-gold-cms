@@ -86,10 +86,27 @@ export const sponsorDetailsSchema = yup.object().shape({
 export const productSchema = yup.object().shape({
   name: yup.string().required("Title is required"),
   description: yup.string().required("description is required"),
-  brandId: yup.number().required("Brand is required"),
-  categoryId: yup.number().required("Category is required"),
-  subCategoryId: yup.number().required("Sub Category is required"),
-  price: yup.number().min(1).required("Price is required"),
+  brandId: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .required("Brand is required"),
+  categoryId: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .required("Category is required"),
+  subCategoryId: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .required("Sub Category is required"),
+  price: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .min(1)
+    .required("Price is required"),
+  discount: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .required("Discount is required in (0 - 100)"),
   image: yup
     .mixed()
     .test("fileSize", "png and jpeg image required", (value) => {

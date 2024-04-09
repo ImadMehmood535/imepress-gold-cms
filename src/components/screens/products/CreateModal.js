@@ -9,8 +9,10 @@ import { API } from "@/Api";
 import { useToast } from "@/hooks/useToast";
 import { BoxSchema, productSchema } from "@/lib/yup-validations";
 import TextArea from "@/components/ui/TextArea";
-import { Switch } from "@headlessui/react";
 import Select from "@/components/ui/Select";
+import { Switch } from "@headlessui/react";
+import SwitchToggle from "@/components/ui/SwitchToggle";
+import { generateSlug } from "@/utils/slug";
 
 const CreateProduct = ({
   setModal,
@@ -25,7 +27,7 @@ const CreateProduct = ({
     handleSubmit,
     reset,
     watch,
-    setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(productSchema),
@@ -33,6 +35,7 @@ const CreateProduct = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [filterId, setFilterId] = useState(null);
+  const [slugData, setSlug] = useState("");
 
   const createBox = async (data) => {
     try {
@@ -45,9 +48,14 @@ const CreateProduct = ({
 
       delete data.image;
       delete data.categoryId;
+      data.isSale = data.isSale === "true";
+      data.isFeatured = data.isFeatured === "true";
+      data.isNew = data.isNew === "true";
+
       const res = await API.addProduct({
         ...data,
         imageUrl: resImg?.data?.data,
+        slug: generateSlug(slugData),
       });
 
       getAll();
@@ -61,6 +69,10 @@ const CreateProduct = ({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setSlug(getValues("name"));
+  }, [watch("name")]);
 
   const handleFilterId = (id) => {
     setFilterId(id);
@@ -89,33 +101,56 @@ const CreateProduct = ({
           options={brands}
           onChange={() => null}
         />
-        <Select
-          label="Category"
-          name="categoryId"
-          placeholder="Select your Category"
-          register={register}
-          errors={errors}
-          options={categories}
-          onChange={handleFilterId}
-        />
 
-        <Select
-          label="Sub Category"
-          name="subCategoryId"
-          placeholder="Select your Sub-Category"
-          register={register}
-          errors={errors}
-          options={filterCategories}
-          onChange={() => null}
-        />
-        <Input
-          label="Price"
-          name="price"
-          type={"number"}
-          placeholder="Dispatch"
-          register={register}
-          errors={errors}
-        />
+        <div className="w-full grid grid-cols-1 md:grid-cols-2  gap-5 py-6">
+          <Select
+            label="Category"
+            name="categoryId"
+            placeholder="Select your Category"
+            register={register}
+            errors={errors}
+            options={categories}
+            onChange={handleFilterId}
+          />
+
+          <Select
+            label="Sub Category"
+            name="subCategoryId"
+            placeholder="Select your Sub-Category"
+            register={register}
+            errors={errors}
+            options={filterCategories}
+            onChange={() => null}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 py-6">
+          <SwitchToggle
+            name="isFeatured"
+            register={register}
+            label={"Featured"}
+          />
+          <SwitchToggle name="isSale" register={register} label={"Sale"} />
+          <SwitchToggle name="isNew" register={register} label={"New"} />
+        </div>
+        <div className="w-full grid grid-cols-1 md:grid-cols-2  py-6">
+          <Input
+            label="Price"
+            name="price"
+            type={"number"}
+            placeholder="Dispatch"
+            register={register}
+            errors={errors}
+          />
+          <Input
+            label="Discount"
+            name="discount"
+            placeholder="Dispatch"
+            register={register}
+            errors={errors}
+          />
+        </div>
+
         <TextArea
           label="Description"
           name="description"

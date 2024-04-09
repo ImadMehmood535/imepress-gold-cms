@@ -1,5 +1,6 @@
 import CustomTable from "@/components/ui/Table";
 import { Edit } from "lucide-react";
+import Image from "next/image";
 
 const CategoryTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
@@ -8,6 +9,24 @@ const CategoryTable = ({ data, getAll, handleUpdate }) => {
       selector: (row) => row?.no,
       sortable: true,
       grow: 0,
+    },
+    {
+      name: "Image",
+      cell: (row) => {
+        return (
+          <div className="break-all text-wrap max-w-[400px]">
+            <Image
+              src={row?.imageUrl}
+              alt="blog"
+              width={400}
+              height={200}
+              className="max-w-[150px] py-3 rounded-[16px] "
+            />
+          </div>
+        );
+      },
+      sortable: true,
+      grow: 1.5,
     },
     {
       name: "Name",

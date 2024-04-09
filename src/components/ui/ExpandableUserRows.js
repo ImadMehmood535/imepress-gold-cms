@@ -29,6 +29,22 @@ const ExpndablesUserRow = ({ data, getAll }) => {
               <p className="text-sm">{row?.price}</p>
             </div>
             <div className="flex gap-2">
+              <p className="text-sm min-w-[100px] font-bold">Discount:</p>
+              <p className="text-sm">{row?.discount}</p>
+            </div>
+            <div className="flex gap-2">
+              <p className="text-sm min-w-[100px] font-bold">Is Featured?</p>
+              <p className="text-sm">{row?.isFeatured ? "yes" : "no"}</p>
+            </div>
+            <div className="flex gap-2">
+              <p className="text-sm min-w-[100px] font-bold">Sale?</p>
+              <p className="text-sm">{row?.isSale ? "yes" : "no"}</p>
+            </div>
+            <div className="flex gap-2">
+              <p className="text-sm min-w-[100px] font-bold">New?</p>
+              <p className="text-sm">{row?.isNew ? "yes" : "no"}</p>
+            </div>
+            <div className="flex gap-2">
               <p className="text-sm min-w-[100px] font-bold">Brand:</p>
               <p className="text-sm">{row?.brand}</p>
             </div>

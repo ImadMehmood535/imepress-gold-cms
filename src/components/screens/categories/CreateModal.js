@@ -25,7 +25,17 @@ const CreateCategory = ({ setModal, setBrands, brands }) => {
   const createBrandHandler = async (data) => {
     try {
       setIsLoading(true);
-      const res = await API.createCategory(data);
+
+      let formData = new FormData();
+      formData.append("image", data?.image[0]);
+
+      const resImg = await API.uploadImage(formData);
+      delete data.image;
+
+      const res = await API.createCategory({
+        ...data,
+        imageUrl: resImg?.data?.data,
+      });
       setBrands([...brands, res.data.data]);
       resolveToast(res?.data?.message);
       setModal(false);
@@ -50,6 +60,15 @@ const CreateCategory = ({ setModal, setBrands, brands }) => {
           placeholder="Name"
           register={register}
           errors={errors}
+        />
+
+        <Input
+          label="Picture"
+          name="image"
+          placeholder="Dispatch"
+          register={register}
+          errors={errors}
+          type={"file"}
         />
 
         <div className="mt-4">
