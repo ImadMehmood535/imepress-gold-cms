@@ -6,8 +6,9 @@ import { DeleteIcon } from "@/components/ui/TableComponents/DeleteIcon";
 import { useToast } from "@/hooks/useToast";
 import { Edit } from "lucide-react";
 import Image from "next/image";
+import { BadgeX } from "lucide-react";
 
-const ProductTable = ({ data, getAll, handleUpdate }) => {
+const ProductTable = ({ data, getAll, handleUpdate , handleDelete }) => {
   const columns = [
     {
       name: "Id",
@@ -104,6 +105,11 @@ const ProductTable = ({ data, getAll, handleUpdate }) => {
               size={20}
               className="cursor-pointer hover:text-blue-500"
               onClick={() => handleUpdate(row)}
+            />
+            <BadgeX
+              size={20}
+              className="cursor-pointer text-red-500 hover:text-red-900"
+              onClick={() => handleDelete(row.id)}
             />
           </div>
         );

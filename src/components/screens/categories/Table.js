@@ -6,7 +6,7 @@ const CategoryTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
-      selector: (row) => row?.no,
+      selector: (row) => row.no,
       sortable: true,
       grow: 0,
     },

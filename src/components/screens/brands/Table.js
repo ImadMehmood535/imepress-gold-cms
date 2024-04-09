@@ -5,7 +5,7 @@ const BrandTable = ({ data, getAll, handleUpdate }) => {
   const columns = [
     {
       name: "Id",
-      selector: (row) => row?.no,
+      selector: (row) => row?.id,
       sortable: true,
       grow: 0,
     },

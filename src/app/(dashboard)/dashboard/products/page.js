@@ -18,6 +18,7 @@ import CreateBrands from "@/components/screens/brands/CreateModal";
 import CreatePopUPGeneral from "@/components/popups/Create/CreatePopUPGeneral";
 import ProductTable from "@/components/screens/products/Table";
 import CreateProduct from "@/components/screens/products/CreateModal";
+import { useToast } from "@/hooks/useToast";
 
 const page = () => {
   const { authState } = useAuth();
@@ -30,6 +31,7 @@ const page = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const [item, setItem] = useState();
   const [loader, setLoader] = useState(false);
+  const { resolveToast, rejectToast } = useToast();
 
   const getAll = async () => {
     try {
@@ -63,6 +65,16 @@ const page = () => {
     setUpdateModal(true);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await API.deleteProduct(id);
+      setBrands(brands.filter((item) => item?.id != id));
+      resolveToast("Successfully deleted");
+    } catch (error) {
+      rejectToast("Can not delete");
+    }
+  };
+
   useEffect(() => {
     getAll();
     getAllSelects();
@@ -93,6 +105,7 @@ const page = () => {
               data={brands}
               handleUpdate={handleUpdate}
               getAll={getAll}
+              handleDelete={handleDelete}
             />
           </div>
         ) : loader ? (
