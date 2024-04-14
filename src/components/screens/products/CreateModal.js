@@ -10,7 +10,6 @@ import { useToast } from "@/hooks/useToast";
 import { BoxSchema, productSchema } from "@/lib/yup-validations";
 import TextArea from "@/components/ui/TextArea";
 import Select from "@/components/ui/Select";
-import { Switch } from "@headlessui/react";
 import SwitchToggle from "@/components/ui/SwitchToggle";
 import { generateSlug } from "@/utils/slug";
 
@@ -48,6 +47,7 @@ const CreateProduct = ({
 
       delete data.image;
       delete data.categoryId;
+      data.shortDescription = data?.shortDescription ? data?.shortDescription : " "; 
       data.isSale = data.isSale === "true";
       data.isFeatured = data.isFeatured === "true";
       data.isNew = data.isNew === "true";
@@ -151,6 +151,13 @@ const CreateProduct = ({
           />
         </div>
 
+        <TextArea
+          label="Short Description"
+          name="shortDescription"
+          placeholder="Dispatch"
+          register={register}
+          errors={errors}
+        />
         <TextArea
           label="Description"
           name="description"

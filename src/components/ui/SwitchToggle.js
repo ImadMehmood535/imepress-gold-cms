@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 const SwitchToggle = ({ name, register, label, value }) => {
-  console.log(value, "value");
   const [isChecked, setIsChecked] = useState(value);
 
   const handleCheckboxChange = () => {

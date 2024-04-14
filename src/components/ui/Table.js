@@ -21,7 +21,9 @@ const CustomTable = ({ data, columns, title, setRows, bool, getAll }) => {
 
   const filteredItems = data?.filter(
     (item) =>
-      JSON.stringify(item?.name ? item?.name : item?.User?.name)
+      JSON.stringify(
+        item?.name ? item?.name : item?.user ? item?.User?.name : item?.email
+      )
         .toLowerCase()
         .indexOf(filterText.toLowerCase()) !== -1
   );

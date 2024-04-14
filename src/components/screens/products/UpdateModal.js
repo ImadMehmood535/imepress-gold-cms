@@ -9,6 +9,7 @@ import { parse } from "postcss";
 import SwitchToggle from "@/components/ui/SwitchToggle";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productSchema } from "@/lib/yup-validations";
+import TextArea from "@/components/ui/TextArea";
 
 const UpdateProduct = ({
   item,
@@ -30,6 +31,7 @@ const UpdateProduct = ({
       subCategoryId: item?.subCategoryId,
       price: item?.price,
       description: item?.description,
+      shortDescription: item?.shortDescription || " ",
       imageUrl: item?.imageUrl,
       isFeatured: item?.isFeatured,
       isSale: item?.isSale,
@@ -42,7 +44,6 @@ const UpdateProduct = ({
   const { resolveToast, rejectToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [filterId, setFilterId] = useState(item.categoryId);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFilterId = (id) => {
     setFilterId(id);
@@ -143,19 +144,19 @@ const UpdateProduct = ({
             name="isFeatured"
             register={register}
             label={"Featured"}
-            value={item?.isFeatured}
+            value={item?.tags?.featured}
           />
           <SwitchToggle
             name="isSale"
             register={register}
             label={"Sale"}
-            value={item?.isSale}
+            value={item?.tags?.sale}
           />
           <SwitchToggle
             name="isNew"
             register={register}
             label={"New"}
-            value={item?.isNew}
+            value={item?.tags?.new}
           />
         </div>
         <div className="w-full grid grid-cols-1 md:grid-cols-2  py-6">
@@ -185,7 +186,15 @@ const UpdateProduct = ({
           errors={errors}
         />
 
-        <Input
+        <TextArea
+          label="Short Description"
+          name="shortDescription"
+          placeholder="Description"
+          register={register}
+          errors={errors}
+        />
+
+        <TextArea
           label="Description"
           name="description"
           placeholder="Description"

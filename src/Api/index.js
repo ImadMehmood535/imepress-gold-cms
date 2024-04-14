@@ -136,4 +136,10 @@ API.deleteProduct = (id) => {
   return API.delete(`product/${id}`);
 };
 
+//newsletter
+
+API.getNewsLetter = () => {
+  return API.get("/newsletter");
+};
+
 export { API };
