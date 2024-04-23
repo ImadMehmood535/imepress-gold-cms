@@ -12,6 +12,7 @@ import TextArea from "@/components/ui/TextArea";
 import Select from "@/components/ui/Select";
 import SwitchToggle from "@/components/ui/SwitchToggle";
 import { generateSlug } from "@/utils/slug";
+import { Editor } from "primereact/editor";
 
 const CreateProduct = ({
   setModal,
@@ -35,10 +36,10 @@ const CreateProduct = ({
   const [isLoading, setIsLoading] = useState(false);
   const [filterId, setFilterId] = useState(null);
   const [slugData, setSlug] = useState("");
+  const [descriptionData, setDescription] = useState(null);
 
   const createBox = async (data) => {
     try {
-      console.log(data, "data");
       setIsLoading(true);
       let formData = new FormData();
       formData.append("image", data?.image[0]);
@@ -47,7 +48,9 @@ const CreateProduct = ({
 
       delete data.image;
       delete data.categoryId;
-      data.shortDescription = data?.shortDescription ? data?.shortDescription : " "; 
+      data.shortDescription = data?.shortDescription
+        ? data?.shortDescription
+        : " ";
       data.isSale = data.isSale === "true";
       data.isFeatured = data.isFeatured === "true";
       data.isNew = data.isNew === "true";
@@ -55,6 +58,7 @@ const CreateProduct = ({
       const res = await API.addProduct({
         ...data,
         imageUrl: resImg?.data?.data,
+        description:descriptionData,
         slug: generateSlug(slugData),
       });
 
@@ -158,12 +162,19 @@ const CreateProduct = ({
           register={register}
           errors={errors}
         />
-        <TextArea
+        {/* <TextArea
           label="Description"
           name="description"
           placeholder="Dispatch"
           register={register}
           errors={errors}
+        /> */}
+        <p className="flex flex-1 py-4 items-center pl-3 ">Description</p>
+
+        <Editor
+          value={descriptionData}
+          onTextChange={(e) => setDescription(e.htmlValue)}
+          style={{ height: "320px" }}
         />
 
         <Input

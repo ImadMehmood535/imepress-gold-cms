@@ -85,7 +85,6 @@ export const sponsorDetailsSchema = yup.object().shape({
 
 export const productSchema = yup.object().shape({
   name: yup.string().required("Title is required"),
-  description: yup.string().required("description is required"),
   shortDescription: yup.string(),
   brandId: yup
     .number()

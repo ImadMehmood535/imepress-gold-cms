@@ -26,7 +26,7 @@ const Login = () => {
       Cookies.set("email", res?.data?.data?.email);
       Cookies.set("name", res?.data?.data?.name);
       setTimeout(() => {
-        router.push("/");
+        router.push("/dashboard/blogs");
       }, 1000);
       resolveToast("You have successfully logged in");
     } catch (err) {

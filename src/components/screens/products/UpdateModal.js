@@ -10,6 +10,7 @@ import SwitchToggle from "@/components/ui/SwitchToggle";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productSchema } from "@/lib/yup-validations";
 import TextArea from "@/components/ui/TextArea";
+import { Editor } from "primereact/editor";
 
 const UpdateProduct = ({
   item,
@@ -55,6 +56,8 @@ const UpdateProduct = ({
 
   const [imagePreview, setImagePreview] = useState(null);
   const [imageData, setImageData] = useState("");
+  const [description, setDescription] = useState(item?.description);
+
 
   const updateBox = async (data) => {
     try {
@@ -78,6 +81,7 @@ const UpdateProduct = ({
       data.isNew = data.isNew === "true";
       await API.updateProduct(item.id, {
         ...data,
+        description: description,
         imageUrl: imageUrlToUpdate,
       });
       resolveToast("Successfully Updated Product");
@@ -193,13 +197,14 @@ const UpdateProduct = ({
           register={register}
           errors={errors}
         />
+        <p className="flex flex-1 py-4 items-center pl-3 ">Description</p>
 
-        <TextArea
-          label="Description"
-          name="description"
-          placeholder="Description"
-          register={register}
-          errors={errors}
+        <Editor
+          value={description}
+          onTextChange={(e) => {
+            setDescription(e.htmlValue);
+          }}
+          style={{ height: "320px" }}
         />
         <div className="mt-4 flex justify-center items-center gap-12">
           <input
