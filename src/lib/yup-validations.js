@@ -101,7 +101,7 @@ export const productSchema = yup.object().shape({
   price: yup
     .number()
     .transform((value) => (Number.isNaN(value) ? null : value))
-    .min(1)
+    .min(0)
     .required("Price is required"),
   discount: yup
     .number()
