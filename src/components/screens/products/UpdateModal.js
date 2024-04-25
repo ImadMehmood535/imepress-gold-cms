@@ -71,11 +71,11 @@ const UpdateProduct = ({
         imageUrlToUpdate = resImg?.data?.data;
       }
 
-      // delete data.categoryId;
+      delete data.categoryId;
       delete data.imageUrl;
       data.price = parseInt(data.price);
       data.discount = parseInt(data.discount);
-      data.categoryId = parseInt(data.categoryId)
+      // data.categoryId = parseInt(data.categoryId)
       data.subCategoryId = parseInt(data.subCategoryId)
       data.isSale = data.isSale === "true";
       data.isFeatured = data.isFeatured === "true";
