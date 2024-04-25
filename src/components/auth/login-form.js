@@ -47,6 +47,7 @@ const LogInForm = ({ login, loader }) => {
           onClick={() => {}}
           type="submit"
           isLoading={loader}
+ 
           className="w-full mt-2"
         />
       </form>

@@ -9,6 +9,8 @@ import Cookies from "js-cookie";
 import { useAuth } from "@/store/AuthContext";
 import FullScreenLoader from "@/components/general/FullScreenLoader";
 import { useState } from "react";
+import Image from "next/image";
+import { logo } from "@/assets";
 
 const { API } = require("@/Api");
 
@@ -45,6 +47,7 @@ const Login = () => {
   return (
     <section className="flex items-center justify-center h-screen">
       <div className="rounded-lg bg-white shadow-sm w-[35rem] p-8">
+        <Image src={logo} alt="image" width={400} height={400} className="max-w-[200px] mb-4 mx-auto" />
         <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
           ADMIN LOGIN IMEPRESS GOLD
         </h2>

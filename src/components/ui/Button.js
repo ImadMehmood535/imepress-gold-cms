@@ -14,7 +14,7 @@ const Button = ({
   left,
   disabled,
 }) => {
-  const buttonClasses = ` rounded-lg  flex items-center justify-center ${className}`;
+  const buttonClasses = ` rounded-lg  text-white bg-[#164A8C]    transition-all flex items-center justify-center ${className}`;
 
   let variantClasses = "";
   switch (variant) {
@@ -27,6 +27,9 @@ const Button = ({
     case "secondary":
       variantClasses = "text-white bg-black px-4 py-1";
       break;
+
+      case "theme" :
+        variantClasses = " text-white bg-[#164A8C]  hover:bg-[#ECCA63] transition-all"
     default:
       variantClasses = "text-white bg-black";
   }

@@ -58,7 +58,6 @@ const UpdateProduct = ({
   const [imageData, setImageData] = useState("");
   const [description, setDescription] = useState(item?.description);
 
-
   const updateBox = async (data) => {
     try {
       setIsLoading(true);
@@ -76,7 +75,7 @@ const UpdateProduct = ({
       data.price = parseInt(data.price);
       data.discount = parseInt(data.discount);
       // data.categoryId = parseInt(data.categoryId)
-      data.subCategoryId = parseInt(data.subCategoryId)
+      data.subCategoryId = parseInt(data.subCategoryId);
       data.isSale = data.isSale === "true";
       data.isFeatured = data.isFeatured === "true";
       data.isNew = data.isNew === "true";
