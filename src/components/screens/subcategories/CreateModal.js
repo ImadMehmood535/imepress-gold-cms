@@ -44,15 +44,17 @@ const CreateSubCategory = ({ setModal, setBrands, brands, category }) => {
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit(createBrandHandler)}>
-        <Select
-          label="Category"
-          name="categoryId"
-          placeholder="Select your category"
-          register={register}
-          errors={errors}
-          options={category}
-          onChange={()=>null}
-        />
+        {category && (
+          <Select
+            label="Category"
+            name="categoryId"
+            placeholder="Select your category"
+            register={register}
+            errors={errors}
+            options={category}
+            onChange={() => null}
+          />
+        )}
 
         <Input
           label="Name"

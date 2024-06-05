@@ -58,7 +58,7 @@ const CreateProduct = ({
       const res = await API.addProduct({
         ...data,
         imageUrl: resImg?.data?.data,
-        description:descriptionData,
+        description: descriptionData,
         slug: generateSlug(slugData),
       });
 
@@ -96,37 +96,42 @@ const CreateProduct = ({
           register={register}
           errors={errors}
         />
-        <Select
-          label="Brand"
-          name="brandId"
-          placeholder="Select your Brand"
-          register={register}
-          errors={errors}
-          options={brands}
-          onChange={() => null}
-        />
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2  gap-5 py-6">
+        {brands && (
           <Select
-            label="Category"
-            name="categoryId"
-            placeholder="Select your Category"
+            label="Brand"
+            name="brandId"
+            placeholder="Select your Brand"
             register={register}
             errors={errors}
-            options={categories}
-            onChange={handleFilterId}
-          />
-
-          <Select
-            label="Sub Category"
-            name="subCategoryId"
-            placeholder="Select your Sub-Category"
-            register={register}
-            errors={errors}
-            options={filterCategories}
+            options={brands}
             onChange={() => null}
           />
-        </div>
+        )}
+
+        {categories && filterCategories && (
+          <div className="w-full grid grid-cols-1 md:grid-cols-2  gap-5 py-6">
+            <Select
+              label="Category"
+              name="categoryId"
+              placeholder="Select your Category"
+              register={register}
+              errors={errors}
+              options={categories}
+              onChange={handleFilterId}
+            />
+
+            <Select
+              label="Sub Category"
+              name="subCategoryId"
+              placeholder="Select your Sub-Category"
+              register={register}
+              errors={errors}
+              options={filterCategories}
+              onChange={() => null}
+            />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 py-6">
           <SwitchToggle
